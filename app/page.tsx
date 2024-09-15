@@ -2,11 +2,24 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import logo from "./assets/logo.png";
-import Select from "react-select";
+import Select, { MultiValue } from 'react-select';
 
-const SearchPage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState({
+interface SelectOptionType {
+  value: string;
+  label: string;
+}
+
+// Define the filter state type
+interface FilterState {
+  owner: string[];
+  lawFirm: string[];
+  attorney: string[];
+  status: string;
+}
+
+const SearchPage: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [filter, setFilter] = useState<FilterState>({
     status: "Registered",
     owner: [],
     lawFirm: [],
@@ -101,25 +114,19 @@ const SearchPage = () => {
     console.log("Applied Filters:", filter);
   };
 
-  const handleOwnerChange = (selectedOptions) => {
-    const owners = selectedOptions
-      ? selectedOptions.map((option) => option.value)
-      : [];
-    setFilter({ ...filter, owner: owners });
+  const handleOwnerChange = (selectedOptions: MultiValue<SelectOptionType>) => {
+    const owners = selectedOptions ? selectedOptions.map(option => option.value) : [];
+    setFilter(prevFilter => ({ ...prevFilter, owner: owners }));
   };
 
-  const handlelawFirmChange = (selectedOptions) => {
-    const lawFirms = selectedOptions
-      ? selectedOptions.map((option) => option.value)
-      : [];
-    setFilter({ ...filter, lawFirm: lawFirms });
+  const handlelawFirmChange = (selectedOptions: MultiValue<SelectOptionType>) => {
+    const lawFirms = selectedOptions ? selectedOptions.map(option => option.value) : [];
+    setFilter(prevFilter => ({ ...prevFilter, lawFirm: lawFirms }));
   };
 
-  const handleAttorneysChange = (selectedOptions) => {
-    const attorneys = selectedOptions
-      ? selectedOptions.map((option) => option.value)
-      : [];
-    setFilter({ ...filter, attorney: attorneys });
+  const handleAttorneysChange = (selectedOptions: MultiValue<SelectOptionType>) => {
+    const attorneys = selectedOptions ? selectedOptions.map(option => option.value) : [];
+    setFilter(prevFilter => ({ ...prevFilter, attorney: attorneys }));
   };
 
   return (
